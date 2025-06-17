@@ -1,4 +1,4 @@
-import { ItemSkill } from "./itemSkill"
+import { ItemSkill } from "./ItemSkill"
 import reactIcon from '../assets/imgs/reactIcon.png';
 import tailwindIcon from '../assets/imgs/tailwind.png';
 import nodeIcon from '../assets/imgs/node.png';
