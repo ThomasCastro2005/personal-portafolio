@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "categoria": "APLICACIÓN WEB",
+    "titulo": "APP-GYM",
+    "descripcion": "Aplicación para la gestión de gimnasios: rutinas, pagos, asistencia y progreso físico para administradores, entrenadores y usuarios.",
+    "imagen": "/projects/project-img1.png",
+    "url": "https://github.com/ThomasCastro2005/APP-GYM"
+  },
+  {
+    "id": 2,
+    "categoria": "FRONTEND",
+    "titulo": "FRONT-APP-GYM",
+    "descripcion": "Interfaz web de la aplicación de gimnasios, construida con tecnologías modernas para móvil, web y escritorio.",
+    "imagen": "/projects/project-img2.png",
+    "url": "https://github.com/ThomasCastro2005/FRONT-APP-GYM"
+  },
+  {
+    "id": 3,
+    "categoria": "BACKEND",
+    "titulo": "workflow-api",
+    "descripcion": "API para la gestión de flujos de trabajo.",
+    "imagen": "/projects/project-img3.png",
+    "url": "https://github.com/ThomasCastro2005/workflow-api"
+  },
+  {
+    "id": 4,
+    "categoria": "PROYECTO",
+    "titulo": "ORVAN",
+    "descripcion": "Proyecto público publicado en GitHub.",
+    "imagen": "/projects/project-img1.png",
+    "url": "https://github.com/ThomasCastro2005/ORVAN"
+  }
+]

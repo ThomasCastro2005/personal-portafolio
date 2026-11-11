@@ -1,0 +1,75 @@
+name: CI - Docker Compose
+
+on:
+  push:
+    branches: [main, "feature/**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias del frontend
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Compilar el frontend
+        run: npm run build
+
+      - name: Validar la sintaxis de la API
+        run: node --check api/server.js
+
+      - name: Crear .env a partir del ejemplo
+        run: cp .env.example .env
+
+      - name: Validar docker-compose.yml
+        run: docker compose config --quiet
+
+      - name: Construir y levantar los dos contenedores
+        run: docker compose up -d --build --wait --wait-timeout 120
+
+      - name: Ver contenedores en ejecución
+        run: docker compose ps
+
+      - name: Comunicación web -> api por la red interna de Docker
+        run: docker compose exec -T web wget -qO- http://api:3000/api/health
+
+      - name: El navegador llega a la API a través del contenedor web (proxy Nginx)
+        run: |
+          curl -fsS http://localhost:8088/api/health
+          curl -fsS http://localhost:8088/api/projects | grep -q '"titulo"'
+          curl -fsS -X POST http://localhost:8088/api/contact \
+            -H "Content-Type: application/json" \
+            -d '{"nombre":"CI","email":"ci@example.com","mensaje":"Prueba automática"}'
+
+      - name: La API no está publicada en el host (solo accesible por la red interna)
+        run: |
+          if curl -fsS --max-time 3 http://localhost:3000/api/health; then
+            echo "La API no debería estar expuesta en el puerto 3000 del host" && exit 1
+          fi
+          echo "OK: la API solo es accesible desde la red portafolio-net"
+
+      - name: Logs de los contenedores
+        if: always()
+        run: docker compose logs
+
+      - name: Detener los contenedores
+        if: always()
+        run: docker compose down -v

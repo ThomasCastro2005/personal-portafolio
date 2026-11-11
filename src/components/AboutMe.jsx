@@ -2,7 +2,7 @@ import fotoThomas from '../assets/imgs/FOTO_THOMAS.png';
 import navIcon1 from '../assets/imgs/nav-icon1.svg';
 import navIcon2 from '../assets/imgs/nav-icon2.svg';
 import navIcon3 from '../assets/imgs/nav-icon3.svg';
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 
 export const AboutMe = () => {
 

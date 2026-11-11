@@ -1,0 +1,56 @@
+name: portafolio
+
+services:
+  # Contenedor 1: frontend React servido por Nginx (único puerto publicado)
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: portafolio-web:1.0
+    container_name: portafolio-web
+    ports:
+      - "${WEB_PORT:-8088}:8080"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - portafolio-net
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+
+  # Contenedor 2: API Node.js + Express (sin puertos publicados al host)
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    image: portafolio-api:1.0
+    container_name: portafolio-api
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PORT: 3000
+      DATA_DIR: /app/data
+      APP_NAME: ${APP_NAME:-portafolio-api}
+    expose:
+      - "3000"
+    volumes:
+      - api-data:/app/data
+    networks:
+      - portafolio-net
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  portafolio-net:
+    driver: bridge
+
+volumes:
+  api-data:

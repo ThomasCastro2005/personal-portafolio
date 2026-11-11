@@ -1,0 +1,18 @@
+{
+  "name": "portafolio-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API del portafolio: entrega los proyectos y recibe los mensajes de contacto",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

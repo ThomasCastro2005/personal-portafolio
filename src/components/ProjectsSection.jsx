@@ -1,6 +1,24 @@
+import { useEffect, useState } from "react"
 import { ItemProjects } from "./ItemProjects"
 
 export const ProjectsSection = () => {
+    // Los proyectos llegan del contenedor "api" a través del proxy /api de Nginx
+    const [projects, setProjects] = useState([])
+    const [apiStatus, setApiStatus] = useState("cargando")
+
+    useEffect(() => {
+        fetch("/api/projects")
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                return res.json()
+            })
+            .then((data) => {
+                setProjects(data)
+                setApiStatus("conectada")
+            })
+            .catch(() => setApiStatus("sin conexión"))
+    }, [])
+
     return (
         <>
             <section className="bg-black text-gray-400 body-font px-23">
@@ -22,15 +40,17 @@ export const ProjectsSection = () => {
                         </div>
                     </div>
 
+                    <p id="api-status" className="mb-8 text-sm">
+                        Estado de la API:{" "}
+                        <span className={apiStatus === "conectada" ? "text-green-400" : "text-amber-400"}>
+                            {apiStatus}
+                        </span>
+                    </p>
+
                     <div className="flex flex-wrap -m-4">
-                        <ItemProjects />
-                        <ItemProjects />
-                        <ItemProjects />
-                        <ItemProjects />
-                        <ItemProjects />
-                        <ItemProjects />
-                        <ItemProjects />
-                        <ItemProjects />
+                        {projects.map((project) => (
+                            <ItemProjects key={project.id} {...project} />
+                        ))}
                     </div>
                 </div>
             </section>
